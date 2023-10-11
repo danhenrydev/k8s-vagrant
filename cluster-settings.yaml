@@ -1,0 +1,34 @@
+# Overall cluster settings
+
+cluster:
+  name: local-development
+  bootTimeout: 600
+  box: ubuntu/jammy64
+
+  # Thie first IP address to be used, it will be assigned to the master node.
+  # Each worker will be the address +1
+  master:
+    cores: 4
+    memory: 8192
+  worker:
+    count: 1
+    cores: 4
+    memory: 4096
+
+  kubernetes:
+    # Specify a kubernetes version (ex. 1.27.1-00) or use "latest"
+    version: "1.27.6"
+    # Specify a calico version
+    calicoVersion: "3.26.1"
+
+  networking:
+    # Worker IPs are simply incremented from the control IP.
+    startingIP: 172.15.1.10
+    dns:
+      - 8.8.8.8
+      - 1.1.1.1
+    pod_network: 172.16.1.0/16
+    service_network: 172.17.1.0/18
+
+  software:
+    metallb: true
