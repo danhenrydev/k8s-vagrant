@@ -11,6 +11,7 @@ echo "#                              #"
 echo "#    Initial Configuration     #"
 echo "#                              #"
 echo "################################"
+echo -e "\nMachine: $(hostname -s)"
 
 # Handle Arguments
 
@@ -120,3 +121,7 @@ else
   # Install a specific version of kubernetes
   sudo apt-get install -y kubelet="$INSTALL_VERSION" kubectl="$INSTALL_VERSION" kubeadm="$INSTALL_VERSION"
 fi
+
+echo -e "\n\n-------------------------------------------------"
+echo "Initialization for $(hostname -s) complete, moving on "
+echo -e "-------------------------------------------------\n"
