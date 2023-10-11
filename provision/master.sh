@@ -1,4 +1,5 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
 # This script configures the master node
 # and initializes the Kubernetes cluster
 
