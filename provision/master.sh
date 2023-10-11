@@ -1,12 +1,14 @@
 #!/bin/bash
+# This script configures the master node
+# and initializes the Kubernetes cluster
 
-echo "################################"
+echo -e "\n################################"
 echo "#                              #"
-echo "#   Initializing Master Node   #"
+echo "#    Creating Master Node      #"
 echo "#                              #"
 echo "################################"
-
-set -euxo pipefail
+echo -e "\nMachine: $(hostname -s)"
+set -euo pipefail
 
 MASTER_IP=$1
 POD_NETWORK=$2
@@ -15,24 +17,41 @@ CALICO_VERSION=$4
 
 mkdir -p /vagrant/generated
 
-echo "--- Initializing the cluster ---"
-sudo kubeadm init --apiserver-advertise-address=$MASTER_IP --apiserver-cert-extra-sans=$MASTER_IP --pod-network-cidr=$POD_NETWORK --service-cidr=$SERVICE_NETWORK --node-name "$(hostname -s)"
+echo -e "\n\n---------------------------------"
+echo "Initializing the Kubernetes Cluster"
+echo -e "---------------------------------\n"
+kubeadm init --apiserver-advertise-address=$MASTER_IP --apiserver-cert-extra-sans=$MASTER_IP --pod-network-cidr=$POD_NETWORK --service-cidr=$SERVICE_NETWORK --node-name "$(hostname -s)"
 
-echo "--- Creating kubeconfig ---"
+echo -e "\n\n---------------------------------"
+echo "Set up kubectl configuration"
+echo -e "---------------------------------\n"
+
+# Create config for vagrant user
 mkdir -p /home/vagrant/.kube
-sudo cp -i /etc/kubernetes/admin.conf /home/vagrant/.kube/config
-sudo chown vagrant:vagrant /home/vagrant/.kube/config
+cp -i /etc/kubernetes/admin.conf /home/vagrant/.kube/config
+chown vagrant:vagrant /home/vagrant/.kube/config
 
+# Create config for root user
 mkdir -p $HOME/.kube
-sudo cp /etc/kubernetes/admin.conf $HOME/.kube/config
-sudo chown $(id -u):$(id -g) $HOME/.kube/config
+cp /etc/kubernetes/admin.conf $HOME/.kube/config
+chown $(id -u):$(id -g) $HOME/.kube/config
 
+# Copy a copy of the config into the /vagrant/generated dir
+# for the future use by the user
 cp /etc/kubernetes/admin.conf /vagrant/generated/config
 
 sleep 5
 
-echo "--- Installing calico ---"
+echo -e "\n\n---------------------------------"
+echo "Installing Calico into the cluster"
+echo -e "---------------------------------\n"
 kubectl  create -f https://raw.githubusercontent.com/projectcalico/calico/v${CALICO_VERSION}/manifests/calico.yaml
 
-echo "--- Create join script ---"
+echo -e "\n\n---------------------------------------"
+echo "Generating the join script for workers"
+echo -e "---------------------------------------\n"
 kubeadm token create --print-join-command > /vagrant/generated/join.sh
+
+echo -e "\n\n-------------------------------------------------"
+echo "Master node $(hostname -s) configured, moving on "
+echo -e "-------------------------------------------------\n"
