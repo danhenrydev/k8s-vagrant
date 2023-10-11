@@ -129,6 +129,7 @@ Although the project seems to be working well for me as is, there are some thing
 - [ ] Add a Traefik Ingress option
 - [ ] Add support for VmWare Workstation
 - [ ] Add support for QEMU
+- [ ] Pretty up the bash scripts and output
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
