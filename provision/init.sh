@@ -110,8 +110,8 @@ sudo apt-get update -y
 if [ -z "$K8S_VERSION" ] || [[ "$K8S_VERSION" == "latest" ]]; then
   curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.28/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
   echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.28/deb/ /' | sudo tee /etc/apt/sources.list.d/kubernetes.list
-  echo "K8S_VERSION is empty or set to 'latest'."
-  sudo apt-get install -y kubelet kubectl kubeadm
+  apt update
+  apt-get install -y kubelet kubectl kubeadm
 else
   VER=$(echo $K8S_VERSION | cut -d'.' -f1,2)
   curl -fsSL https://pkgs.k8s.io/core:/stable:/v$VER/deb/Release.key | sudo gpg --dearmor -o /etc/apt/keyrings/kubernetes-apt-keyring.gpg
@@ -119,7 +119,7 @@ else
   apt update
   INSTALL_VERSION=$(apt list -a kubeadm | grep -E "kubeadm/unknown $K8S_VERSION" | head -n 1 | awk '{print $2}')
   # Install a specific version of kubernetes
-  sudo apt-get install -y kubelet="$INSTALL_VERSION" kubectl="$INSTALL_VERSION" kubeadm="$INSTALL_VERSION"
+  apt-get install -y kubelet="$INSTALL_VERSION" kubectl="$INSTALL_VERSION" kubeadm="$INSTALL_VERSION"
 fi
 
 echo -e "\n\n-------------------------------------------------"
