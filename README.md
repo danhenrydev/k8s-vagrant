@@ -12,6 +12,8 @@ This uses [Vagrant](https://www.vagrantup.com/) and [kubeadm](https://kubernetes
 
 This project is meant to follow the **K**eep **I**t **S**imple **S**tupid philosophy.  I want the project to be organized in a way and function in a way that it's dead easy for people to use and modify it in a way that works best for them.
 
+This means I will do my best to ensure well commented code, no overly convoluted code, and no strange dependencies or libraries.
+
 **Why did I make this**:
 * I needed a local Kubernetes cluster running on Virtual Machines instead of within containers because I needed `open-iscsi` and mount propagation which doesn't work properly within containers
 * I wanted something simple that I understood instead of having to learn another tool exclusively for local development, and then figure out how to translate that to my homelab cluster.  Using Vagrant it's simply Virtual Machines.
