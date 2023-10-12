@@ -12,13 +12,13 @@ cluster:
   box: ubuntu/jammy64
 
   master:
-    cores: 4
-    memory: 8192
+    cores: 2
+    memory: 2048
   worker:
     # Total number of worker nodes
     count: 1
-    cores: 4
-    memory: 4096
+    cores: 2
+    memory: 2048
 
   kubernetes:
     # Specify a kubernetes version (ex. 1.27.1) or use "latest"
@@ -41,7 +41,7 @@ cluster:
     # Metallb load balancer
     metallb:
       # Install metallb
-      install: false
+      install: true
       # Address range for the LoadBalancer.  Make sure that these
       # addresses are within the startingIP /24 network
       ipRange: 172.15.1.200-172.15.1.250
