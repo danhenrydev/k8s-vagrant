@@ -122,6 +122,12 @@ else
   apt-get install -y kubelet="$INSTALL_VERSION" kubectl="$INSTALL_VERSION" kubeadm="$INSTALL_VERSION"
 fi
 
+echo -e "\n\n---------------------------------"
+echo "Installing Helm"
+echo -e "---------------------------------\n"
+
+curl https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3 | bash
+
 echo -e "\n\n-------------------------------------------------"
 echo "Initialization for $(hostname -s) complete, moving on "
 echo -e "-------------------------------------------------\n"

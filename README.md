@@ -132,6 +132,10 @@ Although the project seems to be working well for me as is, there are some thing
 - [ ] Add support for VmWare Workstation
 - [ ] Add support for QEMU
 - [ ] Pretty up the bash scripts and output
+- [ ] Generate a file at the end with relevant information
+- [ ] Declutter the Vagrantfile
+- [ ] Settings sanity check before running vagrantfile
+
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 

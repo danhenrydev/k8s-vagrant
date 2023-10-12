@@ -1,29 +1,36 @@
-# Overall cluster settings
+# This file is for configuring the cluster
+# before provisioning the machines.
 
 cluster:
+  # The name of the cluster will be the virtualbox group
+  # prefix the machine name, the "node name" in Kubernetes, 
+  # and the hostname.
   name: local-development
+  # Vagrant setting in seconds, increase on slower machines
   bootTimeout: 600
+  # Base Box
   box: ubuntu/jammy64
 
-  # Thie first IP address to be used, it will be assigned to the master node.
-  # Each worker will be the address +1
   master:
     cores: 4
     memory: 8192
   worker:
+    # Total number of worker nodes
     count: 1
     cores: 4
     memory: 4096
 
   kubernetes:
-    # Specify a kubernetes version (ex. 1.27.1-00) or use "latest"
-    version: "1.27.6"
+    # Specify a kubernetes version (ex. 1.27.1) or use "latest"
+    version: "latest"
     # Specify a calico version
     calicoVersion: "3.26.1"
 
   networking:
-    # Worker IPs are simply incremented from the control IP.
+    # Thie first IP address to be used, it will be assigned to the master node.
+    # Each worker will be the address +1
     startingIP: 172.15.1.10
+    # Specifiy specific nameservers
     dns:
       - 8.8.8.8
       - 1.1.1.1
@@ -31,4 +38,16 @@ cluster:
     service_network: 172.17.1.0/18
 
   software:
-    metallb: true
+    # Metallb load balancer
+    metallb:
+      # Install metallb
+      install: false
+      # Address range for the LoadBalancer.  Make sure that these
+      # addresses are within the startingIP /24 network
+      ipRange: 172.15.1.200-172.15.1.250
+    # Install longhorn
+    longhorn:
+      # Install Longhorn
+      install: true
+      # Expose the frontend via LoadBalancer (requires metallb)
+      frontend-lb: true

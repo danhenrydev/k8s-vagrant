@@ -31,15 +31,26 @@ echo -e "---------------------------------\n"
 mkdir -p /home/vagrant/.kube
 cp -i /etc/kubernetes/admin.conf /home/vagrant/.kube/config
 chown vagrant:vagrant /home/vagrant/.kube/config
+chmod 600 /home/vagrant/.kube/config
 
 # Create config for root user
 mkdir -p $HOME/.kube
 cp /etc/kubernetes/admin.conf $HOME/.kube/config
 chown $(id -u):$(id -g) $HOME/.kube/config
+chmod 600 $HOME/.kube/config
 
 # Copy a copy of the config into the /vagrant/generated dir
 # for the future use by the user
 cp /etc/kubernetes/admin.conf /vagrant/generated/config
+
+echo -e "\n\n---------------------------------"
+echo "Setting correct INTERNAL IP"
+echo -e "---------------------------------\n"
+
+sed -i "s/\(\"\)$/ --node-ip=$(ip -o -4 address show dev enp0s8 | awk '{print $4}' | cut -d/ -f1)\"/" /var/lib/kubelet/kubeadm-flags.env
+
+systemctl daemon-reload
+systemctl restart kubelet
 
 sleep 5
 

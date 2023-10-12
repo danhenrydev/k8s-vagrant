@@ -18,6 +18,7 @@ Vagrant.configure("2") do |config|
     master.vm.box = s["cluster"]["box"]
     master.vm.hostname = s["cluster"]["name"] + "-master"
     master.vm.network "private_network", type: "static", ip: network + network_ip
+    master.vm.base_mac = nil
     master.vm.provider "virtualbox" do |vb|
       vb.cpus = s["cluster"]["master"]["cores"]
       vb.memory = s["cluster"]["master"]["memory"]
@@ -51,6 +52,7 @@ Vagrant.configure("2") do |config|
     config.vm.define sprintf("worker-%02d", i + 1) do |worker|
       worker.vm.box = s["cluster"]["box"]
       worker.vm.hostname = s["cluster"]["name"] + "-" + sprintf("worker-%02d", i + 1)
+      worker.vm.base_mac = nil
       worker.vm.network "private_network", type: "static", ip: "#{network}#{sprintf('%02d', i + network_ip.to_i + 1)}"
       worker.vm.provider "virtualbox" do |vb|
         vb.cpus = s["cluster"]["worker"]["cores"]
@@ -77,12 +79,16 @@ Vagrant.configure("2") do |config|
       #
       worker.vm.provision "shell",
         path: "provision/worker.sh"
-        # Arguments: DNS Servers, k8s version
-        #args:  [s["cluster"]["networking"]["dns"].join(" "), s["cluster"]["kubernetes"]["version"]]
+        # Arguments: ip address
 
       # Install metallb
-      if i == (s["cluster"]["worker"]["count"] - 1) and s["cluster"]["software"]["metallb"] and s["cluster"]["software"]["metallb"] != ""
-        worker.vm.provision "shell", path: "provision/metallb.sh"
+      if i == (s["cluster"]["worker"]["count"] - 1) and s["cluster"]["software"]["metallb"]["install"] and s["cluster"]["software"]["metallb"]["install"] != ""
+        worker.vm.provision "shell", path: "provision/metallb.sh", args: s["cluster"]["software"]["metallb"]["ipRange"]
+      end
+
+      #Install Longhorn
+      if i == (s["cluster"]["worker"]["count"] - 1) and s["cluster"]["software"]["longhorn"]["install"] and s["cluster"]["software"]["longhorn"]["install"] != ""
+        worker.vm.provision "shell", path: "provision/longhorn.sh"
       end
     end
   end
