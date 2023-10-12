@@ -47,9 +47,6 @@ The cluster is built using `kubeadm`, using containerd as a CRI, and Calico for 
 [Longhorn](https://longhorn.io)
 <br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Longhorn is optionally installed to provide persistent volumes with support for ReadWriteMany.
 
-### Cluster Specifics
-
-The cluster is built using `kubeadm`, using containerd as a CRI, and Calico for pod networking.
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- GETTING STARTED -->
@@ -68,7 +65,7 @@ Install [VirtualBox](https://www.virtualbox.org/) from their website, Chocolatey
 choco install virtualbox
 ```
 
-**Linux (debian/ubuntu)**
+**Linux (Debian/Ubuntu)**
 ```
 apt install virtualbox
 ```
@@ -95,6 +92,8 @@ apt install vagrant
 brew install vagrant
 ```
 
+## Usage
+
 ### Building your local cluster.
 
 1. Clone the repo
@@ -120,13 +119,38 @@ brew install vagrant
    kubectl get nodes
    ```
 
+### Pausing Your Cluster
+When you aren't using your cluster it makes sense to shut it down, but not destroy it as it can take a significant amount of time to rebuild in the future.  Fortunately Vagrant gives us this option.
+
+**Pause your cluster**
+```
+cd k8s-vagrant
+vagrant suspend
+```
+
+**Resume your cluster**
+```
+cd k8s-vagrant
+vagrant resume
+```
+
+### Destroying your cluster
+When you're finished with your cluster, or you've broken it.  You can destroy your cluster to re-initialize it for a fresh start.
+
+```
+cd k8s-vagrant
+vagrant destroy
+```
+
+
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 <!-- ROADMAP -->
 ## Future Changes
 
-Although the project seems to be working well for me as is, there are some things that I would like to add in the future that I haven't gotten around to yet.
+Although the project seems to be working well for me as is, there are some things that I would like to add in the future that I haven't gotten around to yet.  Here's what I've thought about, in no specific order.
 
 - [ ] Add a Traefik Ingress option
 - [ ] Add support for VmWare Workstation
