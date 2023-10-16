@@ -2,13 +2,23 @@
 
 # This script installs longhorn into the cluster
 
+set -euo pipefail
+
+# Handle arguments
+if [ "$1" = "true" ]; then
+    LB=LoadBalancer
+else
+    LB=ClusterIP
+fi
+
+# This script installs longhorn into the cluster
+
 echo -e "\n################################"
 echo "#                              #"
 echo "#    Installing Longhorn       #"
 echo "#                              #"
 echo "################################"
 echo -e "\nMachine: $(hostname -s)"
-#set -euo pipefail
 
 echo -e "\n\n---------------------------------"
 echo "Installing required packages"
@@ -29,7 +39,12 @@ echo -e "\n\n---------------------------------"
 echo "Installing Longhorn into the cluster"
 echo -e "---------------------------------\n"
 
-helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --version 1.5.1 --values /vagrant/provision/yaml/longhorn-values.yaml
+cp /vagrant/provision/yaml/longhorn-values.yaml /tmp/longhorn-values.yaml
+sed -i "s/<<LONGHORN_LB>>/$LB/g" /tmp/longhorn-values.yaml
+
+helm install longhorn longhorn/longhorn --namespace longhorn-system --create-namespace --version 1.5.1 --values  /tmp/longhorn-values.yaml
+
+sleep 30
 
 while true; do
     # Get the pod statuses

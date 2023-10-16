@@ -72,7 +72,7 @@ image:
 
 service:
   ui:
-    type: LoadBalancer
+    type: <<LONGHORN_LB>>
     nodePort: null
   manager:
     type: ClusterIP

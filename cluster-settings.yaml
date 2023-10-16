@@ -6,31 +6,33 @@ cluster:
   # prefix the machine name, the "node name" in Kubernetes, 
   # and the hostname.
   name: local-development
-  # Vagrant setting in seconds, increase on slower machines
+  # Vagrant setting in seconds, increase on slower machines as provisioning takes longer
   bootTimeout: 600
-  # Base Box
+  # Base Box, only tested with 22.04
   box: ubuntu/jammy64
 
+  # Settings for the Kubernetes Master node
   master:
-    cores: 2
-    memory: 2048
+    cores: 2 # CPU Cores for the VM
+    memory: 2048 # Memory in MB for the VM
+  # Settings for the Kubernetes worker nodes
   worker:
-    # Total number of worker nodes
-    count: 1
-    cores: 2
-    memory: 2048
+    count: 1 # Total number of worker nodes provisioned
+    cores: 2  # Number of cores PER NODE
+    memory: 2048 # Amount of memory in MB PER NODE
 
+  # Kubernetes cluster specific settings
   kubernetes:
-    # Specify a kubernetes version (ex. 1.27.1) or use "latest"
-    version: "latest"
-    # Specify a calico version
-    calicoVersion: "3.26.1"
+    version: "latest" # Specify a kubernetes version (ex. 1.27.1) or use "latest"
+    calicoVersion: "3.26.1" # Specify a calico version, 'latest' does not work here
+                            # Latest version can be found here: https://github.com/projectcalico/calico/releases
+
 
   networking:
-    # Thie first IP address to be used, it will be assigned to the master node.
+    # The first IP address to be used, it will be assigned to the master node.
     # Each worker will be the address +1
     startingIP: 172.15.1.10
-    # Specifiy specific nameservers
+    # Specify specific nameservers
     dns:
       - 8.8.8.8
       - 1.1.1.1
@@ -45,9 +47,10 @@ cluster:
       # Address range for the LoadBalancer.  Make sure that these
       # addresses are within the startingIP /24 network
       ipRange: 172.15.1.200-172.15.1.250
-    # Install longhorn
+
+    # Longhorn specific settings
     longhorn:
       # Install Longhorn
       install: true
-      # Expose the frontend via LoadBalancer (requires metallb)
-      frontend-lb: true
+      # Expose the frontend via LoadBalancer (requires metallb), also this one is a string...
+      frontend-lb: "true"

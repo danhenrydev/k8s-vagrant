@@ -88,7 +88,8 @@ Vagrant.configure("2") do |config|
 
       #Install Longhorn
       if i == (s["cluster"]["worker"]["count"] - 1) and s["cluster"]["software"]["longhorn"]["install"] and s["cluster"]["software"]["longhorn"]["install"] != ""
-        worker.vm.provision "shell", path: "provision/longhorn.sh"
+        worker.vm.provision "shell", path: "provision/longhorn.sh",
+        args: s["cluster"]["software"]["longhorn"]["frontend-lb"]
       end
     end
   end
