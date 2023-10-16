@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # This script initializes all of the provisioned machines
-# to make sure they are ready to be part of a kuberenetes
+# to make sure they are ready to be part of a Kubernetes
 # cluster.
 
 set -euo pipefail
