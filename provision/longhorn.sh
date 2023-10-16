@@ -48,7 +48,7 @@ sleep 30
 
 while true; do
     # Get the pod statuses
-    pod_statuses=$(kubectl get pods -n "longhorn-system" | grep -Eo '[0-9]/[0-9]')
+    pod_statuses=$(kubectl get pods -n "longhorn-system" | grep -Eo '[0-9]/[0-9]' || true)
 
     # Check if any pod has status 0/1
     if [[ $pod_statuses == *'0/1'* ]]; then
